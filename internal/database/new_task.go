@@ -2,10 +2,10 @@ package database
 
 import (
 	"database/sql"
-
-	"github.com/anton-ag/todolist/internal/models"
+	"github.com/GoSPB/go_final/internal/models"
 )
 
+// NewTask добавляет новую задачу в базу данных
 func NewTask(db *sql.DB, task models.Task) (int64, error) {
 	query := "INSERT INTO scheduler (date, title, comment, repeat) VALUES (:date, :title, :comment, :repeat)"
 	res, err := db.Exec(
@@ -18,9 +18,11 @@ func NewTask(db *sql.DB, task models.Task) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+
 	id, err := res.LastInsertId()
 	if err != nil {
 		return 0, err
 	}
+
 	return id, nil
 }

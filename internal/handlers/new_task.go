@@ -8,34 +8,32 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/anton-ag/todolist/internal/database"
-	"github.com/anton-ag/todolist/internal/models"
-	rule "github.com/anton-ag/todolist/internal/repeat"
-
-	_ "modernc.org/sqlite"
+	"github.com/GoSPB/go_final/internal/database"
+	"github.com/GoSPB/go_final/internal/models"
+	"github.com/GoSPB/go_final/internal/repeat"
 )
 
-func NewTask(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
+func NewTask(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		now := time.Now()
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
+		now := time.Now()
 		var task models.Task
 		var buf bytes.Buffer
 
 		_, err := buf.ReadFrom(r.Body)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Ошибка чтения тела запроса"})
 			return
 		}
 
 		if err = json.Unmarshal(buf.Bytes(), &task); err != nil {
-			respondError(w, "Неверный формат запроса")
+			json.NewEncoder(w).Encode(map[string]string{"error": "Неверный формат запроса"})
 			return
 		}
 
 		if task.Title == "" {
-			respondError(w, "Не указан заголовок задачи")
+			json.NewEncoder(w).Encode(map[string]string{"error": "Не указан заголовок задачи"})
 			return
 		}
 
@@ -44,7 +42,7 @@ func NewTask(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if _, err = time.Parse(models.DateFormat, task.Date); err != nil {
-			respondError(w, "Неверный формат времени")
+			json.NewEncoder(w).Encode(map[string]string{"error": "Неверный формат времени"})
 			return
 		}
 
@@ -53,20 +51,20 @@ func NewTask(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if task.Repeat != "" {
-			_, err := rule.NextDate(now, task.Date, task.Repeat)
+			_, err := repeat.NextDate(now, task.Date, task.Repeat)
 			if err != nil {
-				respondError(w, "Неверный формат правила повтора")
+				json.NewEncoder(w).Encode(map[string]string{"error": "Неверный формат правила повтора"})
 				return
 			}
 		}
 
 		id, err := database.NewTask(db, task)
 		if err != nil {
-			respondError(w, "Ошибка работы с БД")
+			json.NewEncoder(w).Encode(map[string]string{"error": "Ошибка работы с БД"})
 			return
 		}
 
 		idS := strconv.Itoa(int(id))
-		respondOk(w, idS)
+		json.NewEncoder(w).Encode(map[string]string{"id": idS})
 	}
 }

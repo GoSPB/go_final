@@ -3,26 +3,23 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"github.com/GoSPB/go_final/internal/database"
 	"net/http"
-	"strconv"
-
-	"github.com/anton-ag/todolist/internal/database"
 )
 
-func DeleteTask(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
+func DeleteTask(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		id := r.FormValue("id")
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-		_, err := strconv.Atoi(id)
-		if err != nil {
-			respondError(w, "Неверный ID")
+		id := r.URL.Query().Get("id")
+		if id == "" {
+			json.NewEncoder(w).Encode(map[string]string{"error": "Не указан идентификатор задачи"})
 			return
 		}
 
-		err = database.DeleteTask(db, id)
+		err := database.DeleteTask(db, id)
 		if err != nil {
-			respondError(w, "Ошибка удаления задачи")
+			json.NewEncoder(w).Encode(map[string]string{"error": "Ошибка при удалении задачи"})
 			return
 		}
 

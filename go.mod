@@ -1,4 +1,4 @@
-module github.com/anton-ag/todolist
+module github.com/GoSPB/go_final
 
 go 1.23.2
 

@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
-	"github.com/anton-ag/todolist/internal/models"
-	rule "github.com/anton-ag/todolist/internal/repeat"
+	"github.com/GoSPB/go_final/internal/models"
+	rule "github.com/GoSPB/go_final/internal/repeat"
 )
 
 func NextDate(w http.ResponseWriter, r *http.Request) {
@@ -13,23 +14,20 @@ func NextDate(w http.ResponseWriter, r *http.Request) {
 	date := r.FormValue("date")
 	repeat := r.FormValue("repeat")
 
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-
 	nowTime, err := time.Parse(models.DateFormat, now)
 	if err != nil {
-		respondError(w, "Некорректный формат даты")
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		json.NewEncoder(w).Encode(map[string]string{"error": "Неверный формат даты"})
 		return
 	}
 
 	nextDate, err := rule.NextDate(nowTime, date, repeat)
 	if err != nil {
-		respondError(w, err.Error())
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 		return
 	}
 
-	_, err = w.Write([]byte(nextDate))
-	if err != nil {
-		respondError(w, err.Error())
-		return
-	}
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Write([]byte(nextDate))
 }

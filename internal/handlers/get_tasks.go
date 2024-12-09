@@ -5,21 +5,27 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/anton-ag/todolist/internal/database"
+	"github.com/GoSPB/go_final/internal/database"
+	"github.com/GoSPB/go_final/internal/models"
 )
 
-func GetTasks(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
+func GetTasks(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		search := r.URL.Query().Get("search")
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-		tasks, err := database.GetTasks(db, search)
+		tasks, err := database.GetTasks(db)
 		if err != nil {
-			respondError(w, err.Error())
+			json.NewEncoder(w).Encode(map[string]string{"error": "Ошибка при получении задач"})
 			return
 		}
-		body, _ := json.Marshal(TasksResponse{Tasks: tasks})
-		w.WriteHeader(http.StatusOK)
-		w.Write(body)
+
+		response := models.TasksResponse{Tasks: tasks}
+		if tasks == nil {
+			response.Tasks = []models.Task{}
+		}
+
+		if err := json.NewEncoder(w).Encode(response); err != nil {
+			json.NewEncoder(w).Encode(map[string]string{"error": "Ошибка при формировании ответа"})
+		}
 	}
 }

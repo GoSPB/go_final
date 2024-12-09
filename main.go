@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/anton-ag/todolist/internal/config"
-	"github.com/anton-ag/todolist/internal/database"
-	"github.com/anton-ag/todolist/internal/handlers"
+	"github.com/GoSPB/go_final/internal/config"
+	"github.com/GoSPB/go_final/internal/database"
+	"github.com/GoSPB/go_final/internal/handlers"
 	"github.com/go-chi/chi/v5"
 
 	_ "modernc.org/sqlite"

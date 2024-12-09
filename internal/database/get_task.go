@@ -2,21 +2,16 @@ package database
 
 import (
 	"database/sql"
-
-	"github.com/anton-ag/todolist/internal/models"
+	"github.com/GoSPB/go_final/internal/models"
 )
 
+// GetTask возвращает задачу по её ID
 func GetTask(db *sql.DB, id string) (models.Task, error) {
 	var task models.Task
-
-	query := "SELECT id, date, title, comment, repeat FROM scheduler WHERE id = :id"
-	row := db.QueryRow(
-		query,
-		sql.Named("id", id),
-	)
-	err := row.Scan(&task.ID, &task.Date, &task.Title, &task.Comment, &task.Repeat)
+	query := "SELECT id, date, title, comment, repeat FROM scheduler WHERE id = ?"
+	err := db.QueryRow(query, id).Scan(&task.ID, &task.Date, &task.Title, &task.Comment, &task.Repeat)
 	if err != nil {
-		return models.Task{}, err
+		return task, err
 	}
 	return task, nil
 }
