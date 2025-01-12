@@ -28,7 +28,7 @@ func NewHandler(db *repository.Storage, port string) {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	staticDir := "C:/Users/catas/Downloads/go_final/web"
+	staticDir := "./web"
 	e.Static("/*", staticDir)
 
 	e.POST("/api/task", h.createTask)
@@ -39,7 +39,7 @@ func NewHandler(db *repository.Storage, port string) {
 	e.DELETE("/api/task", h.deleteTask)
 	e.GET("api/nextdate", h.nextDate)
 
-	if err := e.Start("localhost:" + port); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	if err := e.Start("0.0.0.0:" + port); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		slog.Error("failed to start server", "error", err)
 	}
 }

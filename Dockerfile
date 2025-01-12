@@ -5,7 +5,7 @@ FROM base AS build
 WORKDIR /src
 COPY . .
 RUN go mod download
-RUN go build -o cmd/main.go
+RUN go build -o ./cmd/main.go
 
 FROM base
 WORKDIR /app
