@@ -1,0 +1,21 @@
+meta {
+  name: Create Task
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:7540/api/task
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id" : "123",
+    "date" : "20240101",
+    "title" : "123",
+    "comment" : "123",
+    "repeat" : "d 5"
+  }
+}
