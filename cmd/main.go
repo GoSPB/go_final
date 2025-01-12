@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/anton-ag/todolist/internal/app"
-	"github.com/anton-ag/todolist/internal/config"
+	"task-traker/internal/app"
+	"task-traker/internal/config"
 )
 
 func main() {

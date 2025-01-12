@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/anton-ag/todolist/internal/models"
+	"task-traker/internal/models"
 	_ "modernc.org/sqlite"
 )
 

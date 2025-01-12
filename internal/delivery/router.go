@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/anton-ag/todolist/internal/models"
-	"github.com/anton-ag/todolist/internal/repository"
-	util "github.com/anton-ag/todolist/internal/utils"
+	"task-traker/internal/models"
+	"task-traker/internal/repository"
+	util "task-traker/internal/utils"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"

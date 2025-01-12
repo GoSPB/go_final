@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/anton-ag/todolist/internal/models"
+	"task-traker/internal/models"
 )
 
 func NextDate(now time.Time, date string, repeat string) (string, error) {

@@ -1,4 +1,4 @@
-module github.com/anton-ag/todolist
+module task-traker
 
 go 1.23.2
 

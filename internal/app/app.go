@@ -3,9 +3,9 @@ package app
 import (
 	"log"
 
-	"github.com/anton-ag/todolist/internal/config"
-	"github.com/anton-ag/todolist/internal/delivery"
-	"github.com/anton-ag/todolist/internal/repository"
+	"task-traker/internal/config"
+	"task-traker/internal/delivery"
+	"task-traker/internal/repository"
 
 
 	_ "modernc.org/sqlite"
